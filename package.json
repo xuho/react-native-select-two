@@ -1,0 +1,42 @@
+{
+  "name": "react-native-select-two",
+  "version": "1.0.0",
+  "description": "Component like Select2 on web for React Native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuho/react-native-select-two.git"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "react-native-component",
+    "react",
+    "mobile",
+    "ios",
+    "android",
+    "ui",
+    "react-native-select2",
+    "select2",
+    "component"
+  ],
+  "author": "xuho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuho/react-native-select-two/issues"
+  },
+  "homepage": "https://github.com/xuho/react-native-select-two#readme",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "react": "16.6.1",
+    "react-native": "~0.57.7",
+    "react-native-vector-icons": "^4.2.0",
+    "react-native-modal": "^11.1.0"
+  }
+}
