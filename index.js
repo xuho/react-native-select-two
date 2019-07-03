@@ -66,6 +66,7 @@ class Select2 extends Component {
                     useNativeDriver={true}
                     animationInTiming={300}
                     animationOutTiming={300}
+                    hideModalContentWhileAnimating
                     isVisible={show}>
                     <View style={styles.modalContainer}>
                         <View>
