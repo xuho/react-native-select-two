@@ -15,7 +15,8 @@ class Select2 extends Component {
         cancelButtonText: 'Hủy',
         selectButtonText: 'Chọn',
         listEmptyTitle: 'Không tìm thấy lựa chọn phù hợp',
-        colorTheme: '#16a45f'
+        colorTheme: '#16a45f',
+        data: []
     }
     state = {
         show: false,
@@ -211,7 +212,7 @@ class Select2 extends Component {
                                                             };
                                                         })
                                                         this.setState({ data, preSelectedItem });
-                                                        onRemoveItem(selectedIds);
+                                                        onRemoveItem && onRemoveItem(selectedIds);
                                                     }}
                                                     tagName={tag.name} />
                                             );
@@ -278,10 +279,11 @@ const styles = StyleSheet.create({
 });
 
 Select2.propTypes = {
-    style: PropTypes.object,
-    title: PropTypes.string,
+    data: PropTypes.array.isRequired,
     onSelect: PropTypes.func,
     onRemoveItem: PropTypes.func,
+    style: PropTypes.object,
+    title: PropTypes.string,
     popupTitle: PropTypes.string,
     colorTheme: PropTypes.string,
     isSelectSingle: PropTypes.bool,

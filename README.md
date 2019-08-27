@@ -66,8 +66,9 @@ class CreateNewAppointment extends Component {
 
 - **`style`** _(Object)_ - Custom style for component
 - **`title`** _(String)_ String display when you don't select any item
+- **`data`** _(Array)_ - Datasource of list options: an array of objects (each object have ```name``` property)
 - **`onSelect`** _(Function)_ - The callback function trigger after you press select button
-- **`onRemoveItem`** _(String)_ - The callback function trigger after you press tags to remove them
+- **`onRemoveItem`** _(Function)_ - The callback function trigger after you press tags to remove them
 - **`popupTitle`** _(String)_ - Title of modal select item
 - **`colorTheme`** _(String)_ - Color theme
 - **`isSelectSingle`** _(Bool)_ - Set ```false``` if you want select multiple
