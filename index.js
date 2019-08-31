@@ -27,19 +27,26 @@ class Select2 extends Component {
         keyword: ''
     }
     animatedHeight = new Animated.Value(height * 0.6);
+
     componentDidMount() {
+        this.init();
+    };
+
+    componentWillReceiveProps(newProps) {
+        this.init(newProps);
+    }
+
+    init(newProps) {
         let preSelectedItem = [];
-        let { data } = this.props;
+        let { data } = newProps || this.props;
         data.map(item => {
             if (item.checked) {
                 preSelectedItem.push(item);
             }
         })
         this.setState({ data, preSelectedItem });
-    };
-    componentWillReceiveProps(newProps) {
-        this.setState({ data: newProps.data });
     }
+
     get dataRender() {
         let { data, keyword } = this.state;
         let listMappingKeyword = [];
@@ -201,7 +208,7 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte,defaultFont]}>{preSelectedItem[0].name}</Text>
+                                ? <Text style={[styles.selectedTitlte, defaultFont]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
@@ -264,7 +271,7 @@ const styles = StyleSheet.create({
         height: 36, flex: 1
     },
     selectedTitlte: {
-        fontSize: 14, color: 'gray',textAlign:'right',flex:1
+        fontSize: 14, color: 'gray', textAlign: 'right', flex: 1
     },
     tagWrapper: {
         flexDirection: 'row', flexWrap: 'wrap'
