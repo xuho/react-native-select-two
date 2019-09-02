@@ -74,5 +74,6 @@ class CreateNewAppointment extends Component {
 - **`isSelectSingle`** _(Bool)_ - Set ```false``` if you want select multiple
 - **`cancelButtonText`** _(String)_ - Cancel button text title
 - **`selectButtonText`** _(String)_ - Select button text title
+- **`defaultFontName`** _(String)_ - Set custom font for all components
 
 **MIT Licensed**
