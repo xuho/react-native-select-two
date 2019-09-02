@@ -14,10 +14,11 @@ class Select2 extends Component {
     static defaultProps = {
         cancelButtonText: 'Hủy',
         selectButtonText: 'Chọn',
-        searchPlaceHolderText: "",
-        defaultFontName: "",
+        searchPlaceHolderText: "Nhập vào từ khóa",
         listEmptyTitle: 'Không tìm thấy lựa chọn phù hợp',
-        colorTheme: '#16a45f'
+        colorTheme: '#16a45f',
+        buttonTextStyle: {},
+        buttonStyle: {}
     }
     state = {
         show: false,
@@ -58,6 +59,11 @@ class Select2 extends Component {
         return listMappingKeyword;
     }
 
+    get defaultFont() {
+        let { defaultFontName } = this.props;
+        return defaultFontName ? { fontFamily: defaultFontName } : {};
+    }
+
     cancelSelection() {
         let { data, preSelectedItem } = this.state;
         data.map(item => {
@@ -90,15 +96,14 @@ class Select2 extends Component {
     }
     keyExtractor = (item, idx) => item.id ? item.id.toString() : idx.toString();
     renderItem = ({ item, idx }) => {
-        let { colorTheme = '#16a45f', isSelectSingle, defaultFontName } = this.props;
-        let defaultFont = { fontFamily: defaultFontName };
+        let { colorTheme, isSelectSingle } = this.props;
         return (
             <TouchableOpacity
                 key={item.id ? item.id.toString() : idx.toString()}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
                 style={styles.itemWrapper}>
-                <Text style={[styles.itemText, defaultFont]}>
+                <Text style={[styles.itemText, this.defaultFont]}>
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
@@ -108,10 +113,9 @@ class Select2 extends Component {
         );
     }
     renderEmpty = () => {
-        let { listEmptyTitle, defaultFontName } = this.props;
-        let defaultFont = { fontFamily: defaultFontName };
+        let { listEmptyTitle } = this.props;
         return (
-            <Text style={[styles.empty, defaultFont]}>
+            <Text style={[styles.empty, this.defaultFont]}>
                 {listEmptyTitle}
             </Text>
         );
@@ -123,9 +127,8 @@ class Select2 extends Component {
         let {
             style, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            defaultFontName
+            selectedTitlteStyle, buttonTextStyle, buttonStyle
         } = this.props;
-        let defaultFont = { fontFamily: defaultFontName };
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
             <TouchableOpacity
@@ -145,7 +148,7 @@ class Select2 extends Component {
                     isVisible={show}>
                     <Animated.View style={[styles.modalContainer, { height: this.animatedHeight }]}>
                         <View>
-                            <Text style={[styles.title, defaultFont, { color: colorTheme }]}>
+                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
                                 {popupTitle || title}
                             </Text>
                         </View>
@@ -153,7 +156,7 @@ class Select2 extends Component {
                         <TextInput
                             underlineColorAndroid='transparent'
                             returnKeyType='done'
-                            style={[styles.inputKeyword, defaultFont]}
+                            style={[styles.inputKeyword, this.defaultFont]}
                             placeholder={searchPlaceHolderText}
                             selectionColor={colorTheme}
                             onChangeText={keyword => this.setState({ keyword })}
@@ -180,16 +183,17 @@ class Select2 extends Component {
 
                         <View style={styles.buttonWrapper}>
                             <Button
-                                defaultFont={defaultFont}
+                                defaultFont={this.defaultFont}
                                 onPress={() => {
                                     this.cancelSelection();
                                 }}
                                 title={cancelButtonText}
                                 textColor={colorTheme}
                                 backgroundColor='#fff'
-                                style={[styles.button, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
+                                textStyle={buttonTextStyle}
+                                style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
                             <Button
-                                defaultFont={defaultFont}
+                                defaultFont={this.defaultFont}
                                 onPress={() => {
                                     let selectedIds = [];
                                     selectedItem.map(item => {
@@ -200,7 +204,8 @@ class Select2 extends Component {
                                 }}
                                 title={selectButtonText}
                                 backgroundColor={colorTheme}
-                                style={[styles.button, { marginLeft: 5, marginRight: 10 }]} />
+                                textStyle={buttonTextStyle}
+                                style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
                         </View>
                     </Animated.View>
                 </Modal>
@@ -208,7 +213,7 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte, defaultFont]}>{preSelectedItem[0].name}</Text>
+                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
@@ -237,7 +242,7 @@ class Select2 extends Component {
                                     }
                                 </View>
                         )
-                        : <Text style={[styles.selectedTitlte, defaultFont]}>{title}</Text>
+                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle]}>{title}</Text>
                 }
             </TouchableOpacity>
         );
@@ -271,7 +276,7 @@ const styles = StyleSheet.create({
         height: 36, flex: 1
     },
     selectedTitlte: {
-        fontSize: 14, color: 'gray', textAlign: 'right', flex: 1
+        fontSize: 14, color: 'gray', flex: 1
     },
     tagWrapper: {
         flexDirection: 'row', flexWrap: 'wrap'
@@ -296,7 +301,12 @@ const styles = StyleSheet.create({
 });
 
 Select2.propTypes = {
+    data: PropTypes.array.isRequired,
     style: PropTypes.object,
+    defaultFontName: PropTypes.string,
+    selectedTitlteStyle: PropTypes.object,
+    buttonTextStyle: PropTypes.object,
+    buttonStyle: PropTypes.object,
     title: PropTypes.string,
     onSelect: PropTypes.func,
     onRemoveItem: PropTypes.func,

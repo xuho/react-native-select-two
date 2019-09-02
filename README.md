@@ -23,7 +23,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Select2 from 'react-native-select-two';
 
 const mockData = [
-    { id: 1, name: 'React Native Developer' },
+    { id: 1, name: 'React Native Developer', checked: true }, // set default checked for render option item
     { id: 2, name: 'Android Developer' },
     { id: 3, name: 'iOS Developer' }
 ];
@@ -55,9 +55,9 @@ class CreateNewAppointment extends Component {
 
 ## Usage
 
-``Single select``
+### Single select
 ![Single select](https://raw.githubusercontent.com/xuho/demo-images/master/react-native-select2-single-select.gif)
-``Multiple select``
+### Multiple select
 ![Multiple select](https://raw.githubusercontent.com/xuho/demo-images/master/react-native-select2-multipe-select.gif)
 
 
@@ -75,5 +75,8 @@ class CreateNewAppointment extends Component {
 - **`cancelButtonText`** _(String)_ - Cancel button text title
 - **`selectButtonText`** _(String)_ - Select button text title
 - **`defaultFontName`** _(String)_ - Set custom font for all components
+- **`selectedTitlteStyle`** _(Object)_ - Set custom style for display selected title text
+- **`buttonTextStyle`** _(Object)_ - Set custom button text style
+- **`buttonStyle`** _(Object)_ - Set custom button style
 
 **MIT Licensed**
