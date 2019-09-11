@@ -72,6 +72,7 @@ class CreateNewAppointment extends Component {
 - **`popupTitle`** _(String)_ - Title of modal select item
 - **`colorTheme`** _(String)_ - Color theme
 - **`isSelectSingle`** _(Bool)_ - Set ```false``` if you want select multiple
+- **`showSearchBox`** _(Bool)_ - Set ```false``` if you want hide search box, default value is ```true```
 - **`cancelButtonText`** _(String)_ - Cancel button text title
 - **`selectButtonText`** _(String)_ - Select button text title
 - **`defaultFontName`** _(String)_ - Set custom font for all components

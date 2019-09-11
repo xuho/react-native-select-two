@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -9,6 +9,7 @@ import utilities from './lib/utilities';
 import PropTypes from 'prop-types';
 
 const { height } = Dimensions.get('window');
+const INIT_HEIGHT = height * 0.6;
 // create a component
 class Select2 extends Component {
     static defaultProps = {
@@ -18,7 +19,8 @@ class Select2 extends Component {
         listEmptyTitle: 'Không tìm thấy lựa chọn phù hợp',
         colorTheme: '#16a45f',
         buttonTextStyle: {},
-        buttonStyle: {}
+        buttonStyle: {},
+        showSearchBox: true
     }
     state = {
         show: false,
@@ -27,7 +29,7 @@ class Select2 extends Component {
         data: [],
         keyword: ''
     }
-    animatedHeight = new Animated.Value(height * 0.6);
+    animatedHeight = new Animated.Value(INIT_HEIGHT);
 
     componentDidMount() {
         this.init();
@@ -94,12 +96,12 @@ class Select2 extends Component {
         })
         this.setState({ data, selectedItem });
     }
-    keyExtractor = (item, idx) => item.id ? item.id.toString() : idx.toString();
+    keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
         let { colorTheme, isSelectSingle } = this.props;
         return (
             <TouchableOpacity
-                key={item.id ? item.id.toString() : idx.toString()}
+                key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
                 style={styles.itemWrapper}>
@@ -127,7 +129,7 @@ class Select2 extends Component {
         let {
             style, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitlteStyle, buttonTextStyle, buttonStyle
+            selectedTitlteStyle, buttonTextStyle, buttonStyle, showSearchBox
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -153,26 +155,30 @@ class Select2 extends Component {
                             </Text>
                         </View>
                         <View style={styles.line} />
-                        <TextInput
-                            underlineColorAndroid='transparent'
-                            returnKeyType='done'
-                            style={[styles.inputKeyword, this.defaultFont]}
-                            placeholder={searchPlaceHolderText}
-                            selectionColor={colorTheme}
-                            onChangeText={keyword => this.setState({ keyword })}
-                            onFocus={() => {
-                                Animated.spring(this.animatedHeight, {
-                                    toValue: height * 0.6 + height * 0.2,
-                                    friction: 7
-                                }).start();
-                            }}
-                            onBlur={() => {
-                                Animated.spring(this.animatedHeight, {
-                                    toValue: height * 0.6,
-                                    friction: 7
-                                }).start();
-                            }}
-                        />
+                        {
+                            showSearchBox
+                                ? <TextInput
+                                    underlineColorAndroid='transparent'
+                                    returnKeyType='done'
+                                    style={[styles.inputKeyword, this.defaultFont]}
+                                    placeholder={searchPlaceHolderText}
+                                    selectionColor={colorTheme}
+                                    onChangeText={keyword => this.setState({ keyword })}
+                                    onFocus={() => {
+                                        Animated.spring(this.animatedHeight, {
+                                            toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),
+                                            friction: 7
+                                        }).start();
+                                    }}
+                                    onBlur={() => {
+                                        Animated.spring(this.animatedHeight, {
+                                            toValue: INIT_HEIGHT,
+                                            friction: 7
+                                        }).start();
+                                    }}
+                                />
+                                : null
+                        }
                         <FlatList
                             style={styles.listOption}
                             data={this.dataRender || []}
@@ -195,11 +201,12 @@ class Select2 extends Component {
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
-                                    let selectedIds = [];
+                                    let selectedIds = [], selectedObjectItems = [];
                                     selectedItem.map(item => {
                                         selectedIds.push(item.id);
+                                        selectedObjectItems.push(item);
                                     })
-                                    onSelect && onSelect(selectedIds);
+                                    onSelect && onSelect(selectedIds, selectedObjectItems);
                                     this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
                                 }}
                                 title={selectButtonText}
@@ -213,7 +220,7 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle]}>{preSelectedItem[0].name}</Text>
+                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
@@ -222,7 +229,7 @@ class Select2 extends Component {
                                                     key={index}
                                                     onRemoveTag={() => {
                                                         let preSelectedItem = [];
-                                                        let selectedIds = [];
+                                                        let selectedIds = [], selectedObjectItems = [];
                                                         let { data } = this.state;
                                                         data.map(item => {
                                                             if (item.id === tag.id) {
@@ -231,10 +238,11 @@ class Select2 extends Component {
                                                             if (item.checked) {
                                                                 preSelectedItem.push(item);
                                                                 selectedIds.push(item.id);
+                                                                selectedObjectItems.push(item);
                                                             };
                                                         })
                                                         this.setState({ data, preSelectedItem });
-                                                        onRemoveItem(selectedIds);
+                                                        onRemoveItem && onRemoveItem(selectedIds, selectedObjectItems);
                                                     }}
                                                     tagName={tag.name} />
                                             );
@@ -283,7 +291,7 @@ const styles = StyleSheet.create({
     },
     listOption: {
         paddingHorizontal: 24,
-        paddingTop: 1
+        paddingTop: 1, marginTop: 16
     },
     itemWrapper: {
         borderBottomWidth: 1, borderBottomColor: '#eaeaea',
@@ -313,6 +321,7 @@ Select2.propTypes = {
     popupTitle: PropTypes.string,
     colorTheme: PropTypes.string,
     isSelectSingle: PropTypes.bool,
+    showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
     selectButtonText: PropTypes.string
 }
