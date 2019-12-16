@@ -65,6 +65,7 @@ class CreateNewAppointment extends Component {
 ## Props
 
 - **`style`** _(Object)_ - Custom style for component
+- **`modalStyle`** _(Object)_ - Custom style for modal
 - **`title`** _(String)_ String display when you don't select any item
 - **`data`** _(Array)_ - Datasource of list options: an array of objects (each object have ```name``` property)
 - **`onSelect`** _(Function)_ - The callback function trigger after you press select button
@@ -76,7 +77,7 @@ class CreateNewAppointment extends Component {
 - **`cancelButtonText`** _(String)_ - Cancel button text title
 - **`selectButtonText`** _(String)_ - Select button text title
 - **`defaultFontName`** _(String)_ - Set custom font for all components
-- **`selectedTitlteStyle`** _(Object)_ - Set custom style for display selected title text
+- **`selectedTitleStyle`** _(Object)_ - Set custom style for display selected title text
 - **`buttonTextStyle`** _(Object)_ - Set custom button text style
 - **`buttonStyle`** _(Object)_ - Set custom button style
 
