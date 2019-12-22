@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform, I18nManager } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -20,7 +20,8 @@ class Select2 extends Component {
         colorTheme: '#16a45f',
         buttonTextStyle: {},
         buttonStyle: {},
-        showSearchBox: true
+        showSearchBox: true,
+        isRTL: I18nManager.isRTL
     }
     state = {
         show: false,
@@ -129,9 +130,10 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox, isRTL
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
+
         return (
             <TouchableOpacity
                 onPress={this.showModal}
@@ -323,7 +325,8 @@ Select2.propTypes = {
     isSelectSingle: PropTypes.bool,
     showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
-    selectButtonText: PropTypes.string
+    selectButtonText: PropTypes.string,
+    isRTL: PropTypes.bool
 }
 
 //make this component available to the app
