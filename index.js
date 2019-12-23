@@ -99,14 +99,14 @@ class Select2 extends Component {
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
-        let { colorTheme, isSelectSingle } = this.props;
+        let { colorTheme, isSelectSingle, isRTL } = this.props;
         return (
             <TouchableOpacity
                 key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
-                style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
+                style={[styles.itemWrapper, isRTL && {flexDirection: 'row-reverse'}]}>
+                <Text style={[styles.itemText, this.defaultFont, isRTL && {textAlign:'left', marginLeft: 10}]}>
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
@@ -152,7 +152,7 @@ class Select2 extends Component {
                     isVisible={show}>
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
-                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
+                            <Text style={[styles.title, this.defaultFont, { color: 'colorTheme' }]}>
                                 {popupTitle || title}
                             </Text>
                         </View>
@@ -162,7 +162,7 @@ class Select2 extends Component {
                                 ? <TextInput
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
-                                    style={[styles.inputKeyword, this.defaultFont]}
+                                    style={[styles.inputKeyword, this.defaultFont, {textAlign: isRTL ? 'right' : 'left'}]}
                                     placeholder={searchPlaceHolderText}
                                     selectionColor={colorTheme}
                                     onChangeText={keyword => this.setState({ keyword })}
@@ -189,7 +189,7 @@ class Select2 extends Component {
                             ListEmptyComponent={this.renderEmpty}
                         />
 
-                        <View style={styles.buttonWrapper}>
+                        <View style={[styles.buttonWrapper, isRTL && {flexDirection: 'row-reverse'}]}>
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
@@ -252,7 +252,7 @@ class Select2 extends Component {
                                     }
                                 </View>
                         )
-                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle]}>{title}</Text>
+                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, isRTL && {textAlign: 'left'}]}>{title}</Text>
                 }
             </TouchableOpacity>
         );
