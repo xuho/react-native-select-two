@@ -152,7 +152,7 @@ class Select2 extends Component {
                     isVisible={show}>
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
-                            <Text style={[styles.title, this.defaultFont, { color: 'colorTheme' }]}>
+                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
                                 {popupTitle || title}
                             </Text>
                         </View>
