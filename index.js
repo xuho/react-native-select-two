@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', flexWrap: 'wrap'
     },
     listOption: {
-        paddingHorizontal: 24,
+        marginHorizontal: 24,
         paddingTop: 1, marginTop: 16
     },
     itemWrapper: {
