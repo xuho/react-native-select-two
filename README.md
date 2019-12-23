@@ -87,5 +87,6 @@ class CreateNewAppointment extends Component {
 | **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
 | **buttonStyle**           | _Object_       | none                            | Set custom button style                                                                     |
+| **isRTL**           | _Bool_       | I18nManager.isRTL                            | Disable or enable RTL support                                                                     |
 
 **MIT Licensed**
