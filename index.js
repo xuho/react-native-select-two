@@ -32,11 +32,22 @@ class Select2 extends Component {
     animatedHeight = new Animated.Value(INIT_HEIGHT);
 
     componentDidMount() {
+        Dimensions.addEventListener("change", this.handleDimensionChange);
         this.init();
     };
 
     UNSAFE_componentWillReceiveProps(newProps) {
         this.init(newProps);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener("change", this.handleDimensionChange)
+    };
+
+    handleDimensionChange = e => {
+        const { height } = e.window;
+        const INIT_HEIGHT = height * 0.6;
+        this.animatedHeight.setValue(INIT_HEIGHT);
     }
 
     init(newProps) {
@@ -148,6 +159,7 @@ class Select2 extends Component {
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
                     isVisible={show}>
+                    <SafeAreaView style={{justifyContent: 'flex-end', margin: 0}}> 
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
                             <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
@@ -215,6 +227,7 @@ class Select2 extends Component {
                                 style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
                         </View>
                     </Animated.View>
+                    </SafeAreaView>   
                 </Modal>
                 {
                     preSelectedItem.length > 0
