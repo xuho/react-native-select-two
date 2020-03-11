@@ -54,6 +54,14 @@ class CreateNewAppointment extends Component {
           onRemoveItem={data => {
             this.setState({ data })
           }}
+          tagStyle={{
+            selectedTagArea: {
+              backgroundColor: 'black'
+            },
+            selectedTagText: {
+              color: 'white'
+            }
+          }}
         />
       </View>
     )
@@ -87,5 +95,6 @@ class CreateNewAppointment extends Component {
 | **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
 | **buttonStyle**           | _Object_       | none                            | Set custom button style                                                                     |
+| **tagStyle**              | _Object_       | none                            | Set custom styles for tags  style                                                                     |
 
 **MIT Licensed**
