@@ -60,6 +60,9 @@ class CreateNewAppointment extends Component {
             },
             selectedTagText: {
               color: 'white'
+            },
+            icon: {
+              color: 'red'
             }
           }}
         />
@@ -95,6 +98,6 @@ class CreateNewAppointment extends Component {
 | **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
 | **buttonStyle**           | _Object_       | none                            | Set custom button style                                                                     |
-| **tagStyle**              | _Object_       | none                            | Set custom styles for tags  style                                                                     |
+| **tagStyle**              | _Object_       | none                            | Set custom styles for tags                                                                           |
 
 **MIT Licensed**
