@@ -5,23 +5,18 @@
 ![Single select](https://raw.githubusercontent.com/xuho/demo-images/master/react-native-select2-single-select.gif)
 
 ## Add it to your project
+  - Using NPM
+    `npm install react-native-select-two`
+  - or:
+  - Using Yarn
+    `yarn add react-native-select-two`
 
-1. Insall package
-   - Using NPM
-     `npm install react-native-select-two`
-   - or:
-   - Using Yarn
-     `yarn add react-native-select-two`
-2. Install React Native Modal dependence
 
-- Using NPM
-  `npm install react-native-modal`
-- or
-  -Using Yarn
-  `yarn add react-native-modal`
+## Install dependencies
 
-3. Import package
-   `import Select2 from 'react-native-select-two';`
+1. [react-native-modal](https://github.com/react-native-community/react-native-modal)
+2. [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
+
 
 ## Usage
 
