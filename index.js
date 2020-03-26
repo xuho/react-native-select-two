@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform, I18nManager } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -20,7 +20,8 @@ class Select2 extends Component {
         colorTheme: '#16a45f',
         buttonTextStyle: {},
         buttonStyle: {},
-        showSearchBox: true
+        showSearchBox: true,
+        isRTL: I18nManager.isRTL
     }
     state = {
         show: false,
@@ -98,14 +99,14 @@ class Select2 extends Component {
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
-        let { colorTheme, isSelectSingle } = this.props;
+        let { colorTheme, isSelectSingle, isRTL } = this.props;
         return (
             <TouchableOpacity
                 key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
-                style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
+                style={[styles.itemWrapper, isRTL && {flexDirection: 'row-reverse'}]}>
+                <Text style={[styles.itemText, this.defaultFont, isRTL && {textAlign:'left', marginLeft: 10}]}>
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
@@ -129,9 +130,10 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox, isRTL
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
+
         return (
             <TouchableOpacity
                 onPress={this.showModal}
@@ -160,7 +162,7 @@ class Select2 extends Component {
                                 ? <TextInput
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
-                                    style={[styles.inputKeyword, this.defaultFont]}
+                                    style={[styles.inputKeyword, this.defaultFont, {textAlign: isRTL ? 'right' : 'left'}]}
                                     placeholder={searchPlaceHolderText}
                                     selectionColor={colorTheme}
                                     onChangeText={keyword => this.setState({ keyword })}
@@ -187,7 +189,7 @@ class Select2 extends Component {
                             ListEmptyComponent={this.renderEmpty}
                         />
 
-                        <View style={styles.buttonWrapper}>
+                        <View style={[styles.buttonWrapper, isRTL && {flexDirection: 'row-reverse'}]}>
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
@@ -250,7 +252,7 @@ class Select2 extends Component {
                                     }
                                 </View>
                         )
-                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle]}>{title}</Text>
+                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, isRTL && {textAlign: 'left'}]}>{title}</Text>
                 }
             </TouchableOpacity>
         );
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', flexWrap: 'wrap'
     },
     listOption: {
-        paddingHorizontal: 24,
+        marginHorizontal: 24,
         paddingTop: 1, marginTop: 16
     },
     itemWrapper: {
@@ -323,7 +325,8 @@ Select2.propTypes = {
     isSelectSingle: PropTypes.bool,
     showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
-    selectButtonText: PropTypes.string
+    selectButtonText: PropTypes.string,
+    isRTL: PropTypes.bool
 }
 
 //make this component available to the app
