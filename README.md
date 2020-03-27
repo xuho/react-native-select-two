@@ -5,23 +5,18 @@
 ![Single select](https://raw.githubusercontent.com/xuho/demo-images/master/react-native-select2-single-select.gif)
 
 ## Add it to your project
+  - Using NPM
+    `npm install react-native-select-two`
+  - or:
+  - Using Yarn
+    `yarn add react-native-select-two`
 
-1. Insall package
-   - Using NPM
-     `npm install react-native-select-two`
-   - or:
-   - Using Yarn
-     `yarn add react-native-select-two`
-2. Install React Native Modal dependence
 
-- Using NPM
-  `npm install react-native-modal`
-- or
-  -Using Yarn
-  `yarn add react-native-modal`
+## Install dependencies
 
-3. Import package
-   `import Select2 from 'react-native-select-two';`
+1. [react-native-modal](https://github.com/react-native-community/react-native-modal)
+2. [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
+
 
 ## Usage
 
@@ -70,6 +65,7 @@ class CreateNewAppointment extends Component {
 | Property name             | Type           | Default                         | Description                                                                                 |
 | ------------------------- | -------------- | ------------------------------- | ------------------------------------------------------------------------------------------- |
 | **style**                 | _Object_       | none                            | Custom style for component                                                                  |
+| **modalStyle**            | _Object_       | none                            | Custom style for modal                                                                      |
 | **title**                 | _String_       | none                            | String display when you don't select any item                                               |
 | **data**                  | _Array_        | \*required                      | Datasource of list options: an array of objects (each object have `name` and `id` property) |
 | **onSelect**              | _Function_     | none                            | The callback function trigger after you press select button                                 |
@@ -83,7 +79,7 @@ class CreateNewAppointment extends Component {
 | **searchPlaceHolderText** | _String_       | Nhập vào từ khóa                | Placeholder text for search field                                                           |
 | **listEmptyTitle**        | _String_       | Không tìm thấy lựa chọn phù hợp | Title to show when there's no item to be render                                             |
 | **defaultFontName**       | _String_       | none                            | Set custom font for all component                                                           |
-| **selectedTitlteStyle**   | _Object_       | none                            | Set custom style for display selected title text                                            |
+| **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
 | **buttonStyle**           | _Object_       | none                            | Set custom button style                                                                     |
 

@@ -35,7 +35,7 @@ class Select2 extends Component {
         this.init();
     };
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         this.init(newProps);
     }
 
@@ -127,9 +127,9 @@ class Select2 extends Component {
 
     render() {
         let {
-            style, title, onSelect, onRemoveItem, popupTitle, colorTheme,
+            style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitlteStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -148,7 +148,7 @@ class Select2 extends Component {
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
                     isVisible={show}>
-                    <Animated.View style={[styles.modalContainer, { height: this.animatedHeight }]}>
+                    <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
                             <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
                                 {popupTitle || title}
@@ -220,7 +220,7 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
+                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
@@ -250,7 +250,7 @@ class Select2 extends Component {
                                     }
                                 </View>
                         )
-                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle]}>{title}</Text>
+                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle]}>{title}</Text>
                 }
             </TouchableOpacity>
         );
@@ -312,7 +312,7 @@ Select2.propTypes = {
     data: PropTypes.array.isRequired,
     style: PropTypes.object,
     defaultFontName: PropTypes.string,
-    selectedTitlteStyle: PropTypes.object,
+    selectedTitleStyle: PropTypes.object,
     buttonTextStyle: PropTypes.object,
     buttonStyle: PropTypes.object,
     title: PropTypes.string,

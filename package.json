@@ -1,6 +1,6 @@
 {
   "name": "react-native-select-two",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Component like Select2 on web for React Native",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,9 @@
   "homepage": "https://github.com/xuho/react-native-select-two#readme",
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-vector-icons": "^4.2.0",
+    "react-native-modal": "^11.1.0"
   },
   "devDependencies": {
     "react": "16.6.1",
