@@ -82,5 +82,6 @@ class CreateNewAppointment extends Component {
 | **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
 | **buttonStyle**           | _Object_       | none                            | Set custom button style                                                                     |
+| **hideName**              | _Bool_         | false                           | Hide name if isSelectSingle is true                                                         |
 
 **MIT Licensed**
