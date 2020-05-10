@@ -1,6 +1,16 @@
 //import liraries
-import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
+import React, {Component} from 'react';
+import {
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    FlatList,
+    TextInput,
+    Dimensions,
+    Animated,
+    Platform
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -8,8 +18,9 @@ import TagItem from './lib/TagItem';
 import utilities from './lib/utilities';
 import PropTypes from 'prop-types';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 const INIT_HEIGHT = height * 0.6;
+
 // create a component
 class Select2 extends Component {
     static defaultProps = {
@@ -35,23 +46,45 @@ class Select2 extends Component {
         this.init();
     };
 
-    UNSAFE_componentWillReceiveProps(newProps) {
+    /**
+     * @description Add to be able to access this class programmatically
+     * @author Taha el mahdaoui (taha.elmahdaoui@devkit-sio.net)
+     * @date 2020-03-16
+     * */
+    componentWillMount() {
+        if (this.props.ref) {
+            this.props.ref(this);
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
         this.init(newProps);
+    }
+
+    /**
+     * @description Add an open method to open the select2 programmatically
+     * @author Taha el mahdaoui (taha.elmahdaoui@devkit-sio.net)
+     * @date 2020-03-16
+     * */
+    open() {
+        this.setState({
+            show: true,
+        });
     }
 
     init(newProps) {
         let preSelectedItem = [];
-        let { data } = newProps || this.props;
+        let {data} = newProps || this.props;
         data.map(item => {
             if (item.checked) {
                 preSelectedItem.push(item);
             }
         })
-        this.setState({ data, preSelectedItem });
+        this.setState({data, preSelectedItem});
     }
 
     get dataRender() {
-        let { data, keyword } = this.state;
+        let {data, keyword} = this.state;
         let listMappingKeyword = [];
         data.map(item => {
             if (utilities.changeAlias(item.name).includes(utilities.changeAlias(keyword))) {
@@ -62,12 +95,12 @@ class Select2 extends Component {
     }
 
     get defaultFont() {
-        let { defaultFontName } = this.props;
-        return defaultFontName ? { fontFamily: defaultFontName } : {};
+        let {defaultFontName} = this.props;
+        return defaultFontName ? {fontFamily: defaultFontName} : {};
     }
 
     cancelSelection() {
-        let { data, preSelectedItem } = this.state;
+        let {data, preSelectedItem} = this.state;
         data.map(item => {
             item.checked = false;
             for (let _selectedItem of preSelectedItem) {
@@ -77,12 +110,12 @@ class Select2 extends Component {
                 }
             }
         });
-        this.setState({ data, show: false, keyword: '', selectedItem: preSelectedItem });
+        this.setState({data, show: false, keyword: '', selectedItem: preSelectedItem});
     }
 
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
-        let { data } = this.state;
+        let {data} = this.state;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -94,11 +127,11 @@ class Select2 extends Component {
         data.map(item => {
             if (item.checked) selectedItem.push(item);
         })
-        this.setState({ data, selectedItem });
+        this.setState({data, selectedItem});
     }
     keyExtractor = (item, idx) => idx.toString();
-    renderItem = ({ item, idx }) => {
-        let { colorTheme, isSelectSingle } = this.props;
+    renderItem = ({item, idx}) => {
+        let {colorTheme, isSelectSingle} = this.props;
         return (
             <TouchableOpacity
                 key={idx}
@@ -109,29 +142,29 @@ class Select2 extends Component {
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
-                    name={item.checked ? 'check-circle-outline' : 'radiobox-blank'}
-                    color={item.checked ? colorTheme : '#777777'} size={20} />
+                      name={item.checked ? 'check-circle-outline' : 'radiobox-blank'}
+                      color={item.checked ? colorTheme : '#777777'} size={20}/>
             </TouchableOpacity>
         );
     }
     renderEmpty = () => {
-        let { listEmptyTitle } = this.props;
+        let {listEmptyTitle} = this.props;
         return (
             <Text style={[styles.empty, this.defaultFont]}>
                 {listEmptyTitle}
             </Text>
         );
     }
-    closeModal = () => this.setState({ show: false });
-    showModal = () => this.setState({ show: true });
+    closeModal = () => this.setState({show: false});
+    showModal = () => this.setState({show: true});
 
     render() {
         let {
-            style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
+            style, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitlteStyle, buttonTextStyle, buttonStyle, showSearchBox
         } = this.props;
-        let { show, selectedItem, preSelectedItem } = this.state;
+        let {show, selectedItem, preSelectedItem} = this.state;
         return (
             <TouchableOpacity
                 onPress={this.showModal}
@@ -148,13 +181,13 @@ class Select2 extends Component {
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
                     isVisible={show}>
-                    <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
+                    <Animated.View style={[styles.modalContainer, {height: this.animatedHeight}]}>
                         <View>
-                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
+                            <Text style={[styles.title, this.defaultFont, {color: colorTheme}]}>
                                 {popupTitle || title}
                             </Text>
                         </View>
-                        <View style={styles.line} />
+                        <View style={styles.line}/>
                         {
                             showSearchBox
                                 ? <TextInput
@@ -163,7 +196,7 @@ class Select2 extends Component {
                                     style={[styles.inputKeyword, this.defaultFont]}
                                     placeholder={searchPlaceHolderText}
                                     selectionColor={colorTheme}
-                                    onChangeText={keyword => this.setState({ keyword })}
+                                    onChangeText={keyword => this.setState({keyword})}
                                     onFocus={() => {
                                         Animated.spring(this.animatedHeight, {
                                             toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),
@@ -197,7 +230,12 @@ class Select2 extends Component {
                                 textColor={colorTheme}
                                 backgroundColor='#fff'
                                 textStyle={buttonTextStyle}
-                                style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
+                                style={[styles.button, buttonStyle, {
+                                    marginRight: 5,
+                                    marginLeft: 10,
+                                    borderWidth: 1,
+                                    borderColor: colorTheme
+                                }]}/>
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
@@ -207,12 +245,12 @@ class Select2 extends Component {
                                         selectedObjectItems.push(item);
                                     })
                                     onSelect && onSelect(selectedIds, selectedObjectItems);
-                                    this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
+                                    this.setState({show: false, keyword: '', preSelectedItem: selectedItem});
                                 }}
                                 title={selectButtonText}
                                 backgroundColor={colorTheme}
                                 textStyle={buttonTextStyle}
-                                style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
+                                style={[styles.button, buttonStyle, {marginLeft: 5, marginRight: 10}]}/>
                         </View>
                     </Animated.View>
                 </Modal>
@@ -220,7 +258,8 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
+                                ? <Text
+                                    style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle, {color: '#333'}]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
@@ -230,7 +269,7 @@ class Select2 extends Component {
                                                     onRemoveTag={() => {
                                                         let preSelectedItem = [];
                                                         let selectedIds = [], selectedObjectItems = [];
-                                                        let { data } = this.state;
+                                                        let {data} = this.state;
                                                         data.map(item => {
                                                             if (item.id === tag.id) {
                                                                 item.checked = false;
@@ -239,18 +278,19 @@ class Select2 extends Component {
                                                                 preSelectedItem.push(item);
                                                                 selectedIds.push(item.id);
                                                                 selectedObjectItems.push(item);
-                                                            };
+                                                            }
+                                                            ;
                                                         })
-                                                        this.setState({ data, preSelectedItem });
+                                                        this.setState({data, preSelectedItem});
                                                         onRemoveItem && onRemoveItem(selectedIds, selectedObjectItems);
                                                     }}
-                                                    tagName={tag.name} />
+                                                    tagName={tag.name}/>
                                             );
                                         })
                                     }
                                 </View>
                         )
-                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle]}>{title}</Text>
+                        : <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitlteStyle]}>{title}</Text>
                 }
             </TouchableOpacity>
         );
@@ -312,7 +352,7 @@ Select2.propTypes = {
     data: PropTypes.array.isRequired,
     style: PropTypes.object,
     defaultFontName: PropTypes.string,
-    selectedTitleStyle: PropTypes.object,
+    selectedTitlteStyle: PropTypes.object,
     buttonTextStyle: PropTypes.object,
     buttonStyle: PropTypes.object,
     title: PropTypes.string,
@@ -323,7 +363,13 @@ Select2.propTypes = {
     isSelectSingle: PropTypes.bool,
     showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
-    selectButtonText: PropTypes.string
+    selectButtonText: PropTypes.string,
+    /**
+     * @description A reference to access this class programmatically
+     * @author Taha el mahdaoui (taha.elmahdaoui@devkit-sio.net)
+     * @date 2020-03-16
+     * */
+    ref: PropTypes.func
 }
 
 //make this component available to the app
