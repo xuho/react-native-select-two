@@ -4,6 +4,17 @@
 
 
 ## Add it to your project
+  - Using NPM
+    `npm install react-native-select-two`
+  - or:
+  - Using Yarn
+    `yarn add react-native-select-two`
+
+
+## Install dependencies
+
+1. [react-native-modal](https://github.com/react-native-community/react-native-modal)
+2. [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
 
 1. Insall package
     - Using NPM
