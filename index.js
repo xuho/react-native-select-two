@@ -83,6 +83,7 @@ class Select2 extends Component {
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
         let { data } = this.state;
+        const {onSelectItem} = this.props;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -95,6 +96,8 @@ class Select2 extends Component {
             if (item.checked) selectedItem.push(item);
         })
         this.setState({ data, selectedItem });
+        if(onSelectItem)
+            onSelectItem(selectedItem)
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
