@@ -20,7 +20,10 @@ class Select2 extends Component {
         colorTheme: '#16a45f',
         buttonTextStyle: {},
         buttonStyle: {},
-        showSearchBox: true
+        showSearchBox: true,
+        showCancelButton: true,
+        showSelectButton: true,
+        showHeader: true,
     }
     state = {
         show: false,
@@ -83,6 +86,7 @@ class Select2 extends Component {
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
         let { data } = this.state;
+        const {onSelectItem,closeOnSelect} = this.props;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -95,6 +99,12 @@ class Select2 extends Component {
             if (item.checked) selectedItem.push(item);
         })
         this.setState({ data, selectedItem });
+        if(onSelectItem) {
+            onSelectItem(selectedItem)
+            if(closeOnSelect){
+                this.setState({show: false})
+            }
+        }
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
@@ -129,7 +139,8 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox, showCancelButton, showSelectButton,
+            showHeader
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -149,11 +160,13 @@ class Select2 extends Component {
                     hideModalContentWhileAnimating
                     isVisible={show}>
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
-                        <View>
-                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
-                                {popupTitle || title}
-                            </Text>
-                        </View>
+                        {showHeader ? (
+                            <View>
+                                <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
+                                    {popupTitle || title}
+                                </Text>
+                            </View>
+                        ):null}
                         <View style={styles.line} />
                         {
                             showSearchBox
@@ -188,7 +201,7 @@ class Select2 extends Component {
                         />
 
                         <View style={styles.buttonWrapper}>
-                            <Button
+                            {showCancelButton ? <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
                                     this.cancelSelection();
@@ -197,8 +210,8 @@ class Select2 extends Component {
                                 textColor={colorTheme}
                                 backgroundColor='#fff'
                                 textStyle={buttonTextStyle}
-                                style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
-                            <Button
+                                style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />:null}
+                            {showSelectButton ? <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
                                     let selectedIds = [], selectedObjectItems = [];
@@ -212,7 +225,7 @@ class Select2 extends Component {
                                 title={selectButtonText}
                                 backgroundColor={colorTheme}
                                 textStyle={buttonTextStyle}
-                                style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
+                                style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />:null}
                         </View>
                     </Animated.View>
                 </Modal>
@@ -323,7 +336,12 @@ Select2.propTypes = {
     isSelectSingle: PropTypes.bool,
     showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
-    selectButtonText: PropTypes.string
+    selectButtonText: PropTypes.string,
+    showCancelButton: PropTypes.bool,
+    showSelectButton: PropTypes.bool,
+    showHeader: PropTypes.bool,
+    onSelectItem: PropTypes.func,
+    closeOnSelect: PropTypes.bool,
 }
 
 //make this component available to the app
