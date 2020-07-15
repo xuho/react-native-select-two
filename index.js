@@ -86,7 +86,7 @@ class Select2 extends Component {
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
         let { data } = this.state;
-        const {onSelectItem} = this.props;
+        const {onSelectItem,closeOnSelect} = this.props;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -99,8 +99,12 @@ class Select2 extends Component {
             if (item.checked) selectedItem.push(item);
         })
         this.setState({ data, selectedItem });
-        if(onSelectItem)
+        if(onSelectItem) {
             onSelectItem(selectedItem)
+            if(closeOnSelect){
+                this.setState({show: false})
+            }
+        }
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
@@ -336,7 +340,8 @@ Select2.propTypes = {
     showCancelButton: PropTypes.bool,
     showSelectButton: PropTypes.bool,
     showHeader: PropTypes.bool,
-    onSelectItem: PropTypes.func
+    onSelectItem: PropTypes.func,
+    closeOnSelect: PropTypes.bool,
 }
 
 //make this component available to the app
