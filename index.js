@@ -30,6 +30,13 @@ class Select2 extends Component {
         keyword: ''
     }
     animatedHeight = new Animated.Value(INIT_HEIGHT);
+    clearSelected() {
+        let dt = this.state.data;
+        dt.map(item => {
+            item.checked = false;
+        });
+        this.setState({ data: dt, preSelectedItem: [] });
+    }
 
     componentDidMount() {
         this.init();
@@ -105,15 +112,21 @@ class Select2 extends Component {
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
                 style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
-                    {item.name}
-                </Text>
+                {
+                    this.props.renderItem != null ?
+                        this.props.renderItem({ item, idx })
+                        :
+                        <Text style={[styles.itemText, this.defaultFont]}>
+                            {item.name}
+                        </Text>
+                }
                 <Icon style={styles.itemIcon}
                     name={item.checked ? 'check-circle-outline' : 'radiobox-blank'}
                     color={item.checked ? colorTheme : '#777777'} size={20} />
             </TouchableOpacity>
         );
     }
+
     renderEmpty = () => {
         let { listEmptyTitle } = this.props;
         return (
@@ -129,7 +142,8 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox, withSelectAll, selectAllText
+            , selectAllStyle
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -148,7 +162,7 @@ class Select2 extends Component {
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
                     isVisible={show}>
-                    <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
+                    <Animated.View style={[styles.modalContainer, { height: this.animatedHeight }, modalStyle]}>
                         <View>
                             <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
                                 {popupTitle || title}
@@ -178,6 +192,31 @@ class Select2 extends Component {
                                     }}
                                 />
                                 : null
+                        }
+                        {
+                            !isSelectSingle && withSelectAll &&
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 24, marginTop: 16 }}>
+                                <Text style={[{ flex: 1, fontSize: 16 }, selectAllStyle]}>{selectAllText ?? 'Select All'}</Text>
+                                <Icon style={styles.itemIcon}
+                                    onPress={() => {
+                                        let data = this.state.data;
+                                        data.map(d => {
+                                            d.checked = typeof (d.checked) == 'undefined' || d.checked == null ? false : d.checked;
+                                        });
+                                        let isCurrentCheckedAll = data.filter(d => d.checked == true).length == this.state.data.length;
+                                        data.map(d => {
+                                            d.checked = !isCurrentCheckedAll;
+                                            return d;
+                                        });
+                                        let selectedItem = [];
+                                        data.map(item => {
+                                            if (item.checked) selectedItem.push(item);
+                                        })
+                                        this.setState({ data, selectedItem });
+                                    }}
+                                    name={this.state.data.filter(d => d.checked == true).length == this.state.data.length ? 'check-circle-outline' : 'radiobox-blank'}
+                                    color={this.state.data.filter(d => d.checked == true).length == this.state.data.length ? colorTheme : '#777777'} size={20} />
+                            </View>
                         }
                         <FlatList
                             style={styles.listOption}
@@ -255,6 +294,7 @@ class Select2 extends Component {
             </TouchableOpacity>
         );
     }
+
 }
 
 // define your styles
