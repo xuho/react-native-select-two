@@ -74,10 +74,10 @@ class CreateNewAppointment extends Component {
 | **colorTheme**            | _string/color_ | #16a45f                         | Color for componet                                                                          |
 | **isSelectSingle**        | _Bool_         | false                           | Selelect only one option                                                                    |
 | **showSearchBox**         | _Bool_         | true                            | Show or hide search field                                                                   |
-| **cancelButtonText**      | _string_       | Hủy                             | Cancel button text title                                                                    |
-| **selectButtonText**      | _String_       | Chọn                            | Select button text title                                                                    |
-| **searchPlaceHolderText** | _String_       | Nhập vào từ khóa                | Placeholder text for search field                                                           |
-| **listEmptyTitle**        | _String_       | Không tìm thấy lựa chọn phù hợp | Title to show when there's no item to be render                                             |
+| **cancelButtonText**      | _string_       | Batal                             | Cancel button text title                                                                    |
+| **selectButtonText**      | _String_       | Pilih                            | Select button text title                                                                    |
+| **searchPlaceHolderText** | _String_       | Cari               | Placeholder text for search field                                                           |
+| **listEmptyTitle**        | _String_       | Data Tidak Ada | Title to show when there's no item to be render                                             |
 | **defaultFontName**       | _String_       | none                            | Set custom font for all component                                                           |
 | **selectedTitleStyle**    | _Object_       | none                            | Set custom style for display selected title text                                            |
 | **buttonTextStyle**       | _Object_       | none                            | Set custom button text style                                                                |
