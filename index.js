@@ -105,8 +105,8 @@ class Select2 extends Component {
                 key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
-                style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
+                style={[styles.itemWrapper, item.containerStyle]}>
+                <Text style={[styles.itemText, this.defaultFont, item.textStyle]}>
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
