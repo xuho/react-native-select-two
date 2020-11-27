@@ -20,7 +20,13 @@ class Select2 extends Component {
         colorTheme: '#16a45f',
         buttonTextStyle: {},
         buttonStyle: {},
-        showSearchBox: true
+        showSearchBox: true,
+        tagStyle: {},
+        showLine: true,
+        popupTitleStyle: {},
+        inputStyle: {},
+        listBlockStyle: {},
+        showCheckbox: true
     }
     state = {
         show: false,
@@ -29,7 +35,7 @@ class Select2 extends Component {
         data: [],
         keyword: ''
     }
-    animatedHeight = new Animated.Value(INIT_HEIGHT);
+    animatedHeight = new Animated.Value(this.props.windowHeight || INIT_HEIGHT);
 
     componentDidMount() {
         this.init();
@@ -81,6 +87,7 @@ class Select2 extends Component {
     }
 
     onItemSelected = (item, isSelectSingle) => {
+        let { showCheckbox, onSelect } = this.props
         let selectedItem = [];
         let { data } = this.state;
         item.checked = !item.checked;
@@ -95,22 +102,29 @@ class Select2 extends Component {
             if (item.checked) selectedItem.push(item);
         })
         this.setState({ data, selectedItem });
+
+        if (!showCheckbox) {
+          onSelect && onSelect([item.id], [item]);
+          this.setState({ show: false, keyword: '', preSelectedItem: this.state.selectedItem });
+        }
     }
     keyExtractor = (item, idx) => idx.toString();
     renderItem = ({ item, idx }) => {
-        let { colorTheme, isSelectSingle } = this.props;
+        let { colorTheme, isSelectSingle, showCheckbox } = this.props;
         return (
             <TouchableOpacity
                 key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
-                style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
+                style={[styles.itemWrapper, item.containerStyle]}>
+                <Text style={[styles.itemText, this.defaultFont, item.textStyle]}>
                     {item.name}
                 </Text>
-                <Icon style={styles.itemIcon}
+                { showCheckbox &&
+                  <Icon style={styles.itemIcon}
                     name={item.checked ? 'check-circle-outline' : 'radiobox-blank'}
                     color={item.checked ? colorTheme : '#777777'} size={20} />
+                }
             </TouchableOpacity>
         );
     }
@@ -129,7 +143,7 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox, tagStyle, showLine, popupTitleStyle, inputStyle, listBlockStyle, showCheckbox
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -150,44 +164,47 @@ class Select2 extends Component {
                     isVisible={show}>
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
-                            <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
+                            <Text style={[styles.title, this.defaultFont, popupTitleStyle, { color: colorTheme }]}>
                                 {popupTitle || title}
                             </Text>
                         </View>
-                        <View style={styles.line} />
+                        { showLine && <View style={styles.line} /> }
                         {
                             showSearchBox
                                 ? <TextInput
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
-                                    style={[styles.inputKeyword, this.defaultFont]}
+                                    style={[styles.inputKeyword, this.defaultFont, inputStyle]}
                                     placeholder={searchPlaceHolderText}
                                     selectionColor={colorTheme}
                                     onChangeText={keyword => this.setState({ keyword })}
                                     onFocus={() => {
                                         Animated.spring(this.animatedHeight, {
                                             toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),
-                                            friction: 7
+                                            friction: 7,
+                                            useNativeDriver: false
                                         }).start();
                                     }}
                                     onBlur={() => {
                                         Animated.spring(this.animatedHeight, {
                                             toValue: INIT_HEIGHT,
-                                            friction: 7
+                                            friction: 7,
+                                            useNativeDriver: false
                                         }).start();
                                     }}
                                 />
                                 : null
                         }
                         <FlatList
-                            style={styles.listOption}
+                            style={[styles.listOption, listBlockStyle]}
                             data={this.dataRender || []}
                             keyExtractor={this.keyExtractor}
                             renderItem={this.renderItem}
                             ListEmptyComponent={this.renderEmpty}
                         />
 
-                        <View style={styles.buttonWrapper}>
+                        { showCheckbox &&
+                          <View style={styles.buttonWrapper}>
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
@@ -213,7 +230,8 @@ class Select2 extends Component {
                                 backgroundColor={colorTheme}
                                 textStyle={buttonTextStyle}
                                 style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
-                        </View>
+                          </View>
+                        }
                     </Animated.View>
                 </Modal>
                 {
@@ -244,7 +262,8 @@ class Select2 extends Component {
                                                         this.setState({ data, preSelectedItem });
                                                         onRemoveItem && onRemoveItem(selectedIds, selectedObjectItems);
                                                     }}
-                                                    tagName={tag.name} />
+                                                    tagName={tag.name}
+                                                    style={tagStyle}/>
                                             );
                                         })
                                     }
@@ -323,7 +342,14 @@ Select2.propTypes = {
     isSelectSingle: PropTypes.bool,
     showSearchBox: PropTypes.bool,
     cancelButtonText: PropTypes.string,
-    selectButtonText: PropTypes.string
+    selectButtonText: PropTypes.string,
+    tagStyle: PropTypes.object,
+    windowHeight: PropTypes.number,
+    showLine: PropTypes.bool,
+    popupTitleStyle: PropTypes.object,
+    inputStyle: PropTypes.object,
+    listBlockStyle: PropTypes.object,
+    showCheckbox: PropTypes.bool,
 }
 
 //make this component available to the app
