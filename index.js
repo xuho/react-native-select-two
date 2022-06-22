@@ -13,10 +13,10 @@ const INIT_HEIGHT = height * 0.6;
 // create a component
 class Select2 extends Component {
     static defaultProps = {
-        cancelButtonText: 'Hủy',
-        selectButtonText: 'Chọn',
-        searchPlaceHolderText: "Nhập vào từ khóa",
-        listEmptyTitle: 'Không tìm thấy lựa chọn phù hợp',
+        cancelButtonText: 'Cancel',
+        selectButtonText: 'Select',
+        searchPlaceHolderText: "Search here",
+        listEmptyTitle: 'Not found',
         colorTheme: '#16a45f',
         buttonTextStyle: {},
         buttonStyle: {},
