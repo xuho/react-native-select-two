@@ -27,7 +27,8 @@ class Select2 extends Component {
         preSelectedItem: [],
         selectedItem: [],
         data: [],
-        keyword: ''
+        keyword: '',
+        inputRef: React.createRef(),
     }
     animatedHeight = new Animated.Value(INIT_HEIGHT);
 
@@ -131,13 +132,18 @@ class Select2 extends Component {
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
             selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
         } = this.props;
-        let { show, selectedItem, preSelectedItem } = this.state;
+        let { show, selectedItem, preSelectedItem, inputRef } = this.state;
         return (
             <TouchableOpacity
                 onPress={this.showModal}
                 activeOpacity={0.7}
                 style={[styles.container, style]}>
                 <Modal
+                    onModalShow={() => {
+                        setTimeout(() => {
+                            this.state.inputRef.current.focus()
+                        }, 100);
+                    }}
                     onBackdropPress={this.closeModal}
                     style={{
                         justifyContent: 'flex-end',
@@ -158,6 +164,7 @@ class Select2 extends Component {
                         {
                             showSearchBox
                                 ? <TextInput
+                                    ref={inputRef}
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
                                     style={[styles.inputKeyword, this.defaultFont]}
