@@ -68,11 +68,14 @@ class Select2 extends Component {
     }
 
 
-    handleConfirm() {
+    handleConfirm(recivedSelectedItem) {
         let { onSelect } = this.props;
         let { selectedItem } = this.state;
         let selectedIds = [], selectedObjectItems = [];
-        selectedItem.map(item => {
+        let itens = recivedSelectedItem 
+            ? recivedSelectedItem 
+            : selectedItem
+        itens.map(item => {
             selectedIds.push(item.id);
             selectedObjectItems.push(item);
         })
@@ -110,8 +113,7 @@ class Select2 extends Component {
         })
         if(isSelectSingle && item.checked) {
             Keyboard.dismiss()
-            this.closeModal()
-            this.handleConfirm()
+            this.handleConfirm(selectedItem)
         }
         this.setState({ data, selectedItem });
     }
@@ -141,7 +143,7 @@ class Select2 extends Component {
             </Text>
         );
     }
-    closeModal = () => this.setState({ show: false });
+    closeModal = () => this.setState({ show: false, keyword: '' });
     showModal = () => this.setState({ show: true });
 
     render() {
