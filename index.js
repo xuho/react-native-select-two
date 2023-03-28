@@ -97,6 +97,7 @@ class Select2 extends Component {
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
         let { data } = this.state;
+        let { onSelect } = this.props;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -110,8 +111,15 @@ class Select2 extends Component {
         })
         if(isSelectSingle && item.checked) {
             Keyboard.dismiss()
-            this.closeModal()
-            this.handleConfirm()
+            let selectedIds = [], selectedObjectItems = [];
+            selectedItem.forEach(item => {
+                selectedIds.push(item.id);
+                selectedObjectItems.push(item);
+            })
+            if(onSelect) {
+                onSelect(selectedIds, selectedObjectItems);
+            }
+            this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
         }
         this.setState({ data, selectedItem });
     }
