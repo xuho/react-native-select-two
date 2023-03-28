@@ -68,11 +68,12 @@ class Select2 extends Component {
     }
 
 
-    handleConfirm() {
+    handleConfirm(recivedSelectedItem = []) {
         let { onSelect } = this.props;
         let { selectedItem } = this.state;
         let selectedIds = [], selectedObjectItems = [];
-        selectedItem.map(item => {
+        let itens = recivedSelectedItem.length ? recivedSelectedItem : selectedItem
+        itens.map(item => {
             selectedIds.push(item.id);
             selectedObjectItems.push(item);
         })
@@ -97,7 +98,6 @@ class Select2 extends Component {
     onItemSelected = (item, isSelectSingle) => {
         let selectedItem = [];
         let { data } = this.state;
-        let { onSelect } = this.props;
         item.checked = !item.checked;
         for (let index in data) {
             if (data[index].id === item.id) {
@@ -111,15 +111,7 @@ class Select2 extends Component {
         })
         if(isSelectSingle && item.checked) {
             Keyboard.dismiss()
-            let selectedIds = [], selectedObjectItems = [];
-            selectedItem.forEach(item => {
-                selectedIds.push(item.id);
-                selectedObjectItems.push(item);
-            })
-            if(onSelect) {
-                onSelect(selectedIds, selectedObjectItems);
-            }
-            this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
+            this.handleConfirm(selectedItem)
         }
         this.setState({ data, selectedItem });
     }
@@ -149,7 +141,7 @@ class Select2 extends Component {
             </Text>
         );
     }
-    closeModal = () => this.setState({ show: false });
+    closeModal = () => this.setState({ show: false, keyword: '' });
     showModal = () => this.setState({ show: true });
 
     render() {
