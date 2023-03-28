@@ -72,7 +72,7 @@ class Select2 extends Component {
         let { onSelect } = this.props;
         let { selectedItem } = this.state;
         let selectedIds = [], selectedObjectItems = [];
-        let itens = recivedSelectedItem && recivedSelectedItem.length > 0 
+        let itens = recivedSelectedItem 
             ? recivedSelectedItem 
             : selectedItem
         itens.map(item => {
