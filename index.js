@@ -68,11 +68,13 @@ class Select2 extends Component {
     }
 
 
-    handleConfirm(recivedSelectedItem = []) {
+    handleConfirm(recivedSelectedItem) {
         let { onSelect } = this.props;
         let { selectedItem } = this.state;
         let selectedIds = [], selectedObjectItems = [];
-        let itens = recivedSelectedItem.length ? recivedSelectedItem : selectedItem
+        let itens = recivedSelectedItem && recivedSelectedItem.length > 0 
+            ? recivedSelectedItem 
+            : selectedItem
         itens.map(item => {
             selectedIds.push(item.id);
             selectedObjectItems.push(item);
