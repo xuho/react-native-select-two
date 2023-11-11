@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -27,7 +27,8 @@ class Select2 extends Component {
         preSelectedItem: [],
         selectedItem: [],
         data: [],
-        keyword: ''
+        keyword: '',
+        inputRef: React.createRef(),
     }
     animatedHeight = new Animated.Value(INIT_HEIGHT);
 
@@ -66,6 +67,22 @@ class Select2 extends Component {
         return defaultFontName ? { fontFamily: defaultFontName } : {};
     }
 
+
+    handleConfirm(recivedSelectedItem) {
+        let { onSelect } = this.props;
+        let { selectedItem } = this.state;
+        let selectedIds = [], selectedObjectItems = [];
+        let itens = recivedSelectedItem 
+            ? recivedSelectedItem 
+            : selectedItem
+        itens.map(item => {
+            selectedIds.push(item.id);
+            selectedObjectItems.push(item);
+        })
+        onSelect && onSelect(selectedIds, selectedObjectItems);
+        this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
+    }
+
     cancelSelection() {
         let { data, preSelectedItem } = this.state;
         data.map(item => {
@@ -94,6 +111,10 @@ class Select2 extends Component {
         data.map(item => {
             if (item.checked) selectedItem.push(item);
         })
+        if(isSelectSingle && item.checked) {
+            Keyboard.dismiss()
+            this.handleConfirm(selectedItem)
+        }
         this.setState({ data, selectedItem });
     }
     keyExtractor = (item, idx) => idx.toString();
@@ -122,22 +143,27 @@ class Select2 extends Component {
             </Text>
         );
     }
-    closeModal = () => this.setState({ show: false });
+    closeModal = () => this.setState({ show: false, keyword: '' });
     showModal = () => this.setState({ show: true });
 
     render() {
         let {
-            style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
+            style, modalStyle, title, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
             selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
         } = this.props;
-        let { show, selectedItem, preSelectedItem } = this.state;
+        let { show, preSelectedItem, inputRef } = this.state;
         return (
             <TouchableOpacity
                 onPress={this.showModal}
                 activeOpacity={0.7}
                 style={[styles.container, style]}>
                 <Modal
+                    onModalShow={() => {
+                        setTimeout(() => {
+                            this.state.inputRef.current.focus()
+                        }, 100);
+                    }}
                     onBackdropPress={this.closeModal}
                     style={{
                         justifyContent: 'flex-end',
@@ -158,6 +184,7 @@ class Select2 extends Component {
                         {
                             showSearchBox
                                 ? <TextInput
+                                    ref={inputRef}
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
                                     style={[styles.inputKeyword, this.defaultFont]}
@@ -180,6 +207,7 @@ class Select2 extends Component {
                                 : null
                         }
                         <FlatList
+                            keyboardShouldPersistTaps="handled"
                             style={styles.listOption}
                             data={this.dataRender || []}
                             keyExtractor={this.keyExtractor}
@@ -198,21 +226,15 @@ class Select2 extends Component {
                                 backgroundColor='#fff'
                                 textStyle={buttonTextStyle}
                                 style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
+                            {!isSelectSingle &&
                             <Button
                                 defaultFont={this.defaultFont}
-                                onPress={() => {
-                                    let selectedIds = [], selectedObjectItems = [];
-                                    selectedItem.map(item => {
-                                        selectedIds.push(item.id);
-                                        selectedObjectItems.push(item);
-                                    })
-                                    onSelect && onSelect(selectedIds, selectedObjectItems);
-                                    this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
-                                }}
+                                onPress={this.handleConfirm}
                                 title={selectButtonText}
                                 backgroundColor={colorTheme}
                                 textStyle={buttonTextStyle}
                                 style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
+                            }
                         </View>
                     </Animated.View>
                 </Modal>
@@ -220,7 +242,7 @@ class Select2 extends Component {
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
-                                ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
+                            ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
                                     {
                                         preSelectedItem.map((tag, index) => {
